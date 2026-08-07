@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MPI - Media Pembelajaran Interaktif</title>
+    <title>MPI - Media Pembelajaran Interaktif (Full Screen)</title>
     <style>
-        /* CSS UNTUK TAMPILAN */
+        /* CSS UTK TAMPILAN */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -16,6 +16,8 @@
             align-items: center;
             height: 100vh;
         }
+        
+        /* Container utama MPI */
         .container {
             width: 800px;
             height: 500px;
@@ -25,9 +27,38 @@
             overflow: hidden;
             position: relative;
         }
+
+        /* Mengatur tampilan Container saat masuk mode Full Screen */
+        .container:fullscreen {
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Tombol Full Screen di Pojok Kanan Atas */
+        .btn-fullscreen {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 999;
+            transition: 0.2s;
+        }
+        .btn-fullscreen:hover { background-color: rgba(0, 0, 0, 0.8); }
+
         /* Mengontrol perpindahan halaman */
         .page {
-            display: none; /* Sembunyikan semua halaman secara default */
+            display: none; 
             padding: 40px;
             height: 100%;
             box-sizing: border-box;
@@ -35,9 +66,10 @@
             width: 100%;
         }
         .page.active {
-            display: block; /* Hanya tampilkan halaman dengan class 'active' */
+            display: block; 
         }
-        /* Desain Tombol dan Navigasi */
+
+        /* Desain Tombol Konten */
         .btn {
             background-color: #007bff;
             color: white;
@@ -50,8 +82,6 @@
             margin: 5px;
         }
         .btn:hover { background-color: #0056b3; }
-        .btn-success { background-color: #28a745; }
-        .btn-success:hover { background-color: #218838; }
         .btn-back { background-color: #6c757d; position: absolute; bottom: 30px; left: 40px; }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
         .quiz-feedback { margin-top: 15px; font-weight: bold; }
@@ -59,7 +89,11 @@
 </head>
 <body>
 
-<div class="container">
+<!-- Tombol Full Screen diletakkan di luar container atau di dalam container -->
+<div class="container" id="mpi-container">
+    
+    <!-- TOMBOL KONTROL FULLSCREEN -->
+    <button class="btn-fullscreen" onclick="toggleFullScreen()">🖥️ Full Screen</button>
 
     <!-- 1. HALAMAN UTAMA / SAMPUL -->
     <div id="p-home" class="page active">
@@ -113,35 +147,57 @@
 </div>
 
 <script>
-    // JAVASCRIPT LOGIC UNTUK INTERAKTIVITAS
-
-    // Fungsi utama untuk berpindah halaman/slide
+    // FUNGSI NAVIGASI HALAMAN
     function bukaHalaman(idHalaman) {
-        // Cari semua elemen yang memiliki class 'page' lalu sembunyikan
         let seluruhHalaman = document.querySelectorAll('.page');
-        seluruhHalaman.forEach(hlm => {
-            hlm.classList.remove('active');
-        });
-
-        // Tampilkan halaman spesifik yang di-klik user
+        seluruhHalaman.forEach(hlm => { hlm.classList.remove('active'); });
         document.getElementById(idHalaman).classList.add('active');
-        
-        // Reset feedback kuis jika user membuka kembali halaman kuis
-        if(idHalaman !== 'p-kuis') {
-            document.getElementById('feedback').innerText = '';
-        }
+        if(idHalaman !== 'p-kuis') { document.getElementById('feedback').innerText = ''; }
     }
 
-    // Fungsi mengecek jawaban kuis
+    // FUNGSI CEK JAWABAN KUIS
     function cekJawaban(apakahBenar, pesan) {
         let feedbackBox = document.getElementById('feedback');
         feedbackBox.innerText = pesan;
-        if(apakahBenar) {
-            feedbackBox.style.color = '#28a745';
-        } else {
-            feedbackBox.style.color = '#dc3545';
+        feedbackBox.style.color = apakahBenar ? '#28a745' : '#dc3545';
+    }
+
+    // FUNGSI LOGIKA FULL SCREEN
+    function toggleFullScreen() {
+        let mpiElement = document.getElementById("mpi-container");
+        let btnText = document.querySelector(".btn-fullscreen");
+
+        // Jika belum dalam mode full screen, ubah ke full screen
+        if (!document.fullscreenElement) {
+            if (mpiElement.requestFullscreen) {
+                mpiElement.requestFullscreen();
+            } else if (mpiElement.webkitRequestFullscreen) { /* Safari */
+                mpiElement.webkitRequestFullscreen();
+            } else if (mpiElement.msRequestFullscreen) { /* IE11 */
+                mpiElement.msRequestFullscreen();
+            }
+            btnText.innerText = "❌ Keluar Full Screen";
+        } 
+        // Jika sudah full screen, maka keluar dari mode full screen
+        else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+            }
+            btnText.innerText = "🖥️ Full Screen";
         }
     }
+
+    // Mendeteksi jika siswa menekan tombol 'Esc' di keyboard untuk sinkronisasi teks tombol
+    document.addEventListener('fullscreenchange', () => {
+        let btnText = document.querySelector(".btn-fullscreen");
+        if (!document.fullscreenElement) {
+            btnText.innerText = "🖥️ Full Screen";
+        }
+    });
 </script>
 
 </body>
