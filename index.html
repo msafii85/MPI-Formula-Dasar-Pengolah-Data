@@ -1,817 +1,148 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Formula Dasar Excel — Interaktif untuk SMP</title>
-
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-
-  <style>
-    /* Minor custom styles to complement Tailwind */
-    :root {
-      --sky: #1787d8;
-      --excel: #167c4b;
-      --muted: #6b7280;
-    }
-
-    /* Spreadsheet grid look */
-    .sheet {
-      border-collapse: collapse;
-      min-width: 100%;
-      width: 100%;
-      table-layout: fixed;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .sheet th, .sheet td {
-      border: 1px solid #e6f0fb;
-      padding: 8px;
-      text-align: center;
-      font-size: 0.95rem;
-      vertical-align: middle;
-      background: white;
-      min-width: 64px;
-    }
-    .sheet th {
-      background: #f0f9ff;
-      color: var(--sky);
-      font-weight: 700;
-    }
-    .sheet td[contenteditable="true"] {
-      cursor: text;
-    }
-    .cell-highlight {
-      outline: 3px solid rgba(23,135,216,0.22);
-      background: rgba(23,135,216,0.05);
-    }
-    .answer-correct { background: #ecfdf5; border-color: #bbf7d0; color: #065f46; }
-    .answer-wrong { background: #fff1f2; border-color: #fecdd3; color: #991b1b; }
-
-    /* Simple slide animation and layout */
-    .slide { display: none; padding: 2rem 1rem; }
-    .slide.active { display: block; animation: slideIn .36s ease both; }
-    @keyframes slideIn { from { opacity: 0; transform: translateY(12px);} to { opacity: 1; transform: translateY(0);} }
-
-    /* Make input monospace for formulas */
-    .formula-input { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
-
-    /* Footer small */
-    footer small { color: var(--muted); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPI - Media Pembelajaran Interaktif</title>
+    <style>
+        /* CSS UNTUK TAMPILAN */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 800px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        /* Mengontrol perpindahan halaman */
+        .page {
+            display: none; /* Sembunyikan semua halaman secara default */
+            padding: 40px;
+            height: 100%;
+            box-sizing: border-box;
+            position: absolute;
+            width: 100%;
+        }
+        .page.active {
+            display: block; /* Hanya tampilkan halaman dengan class 'active' */
+        }
+        /* Desain Tombol dan Navigasi */
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 5px;
+        }
+        .btn:hover { background-color: #0056b3; }
+        .btn-success { background-color: #28a745; }
+        .btn-success:hover { background-color: #218838; }
+        .btn-back { background-color: #6c757d; position: absolute; bottom: 30px; left: 40px; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
+        .quiz-feedback { margin-top: 15px; font-weight: bold; }
+    </style>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-sky-50 to-white text-slate-800">
+<body>
 
-  <!-- App container -->
-  <div class="max-w-5xl mx-auto">
+<div class="container">
 
-    <!-- Header -->
-    <header class="py-6 px-4 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="rounded-lg bg-white p-3 shadow-md">
-          <!-- simple icon -->
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" class="text-sky-600">
-            <rect x="3" y="3" width="18" height="18" rx="3" stroke="#1787d8" stroke-width="1.5" fill="#eaf6ff"></rect>
-            <path d="M7 10h10M7 14h6" stroke="#0780d6" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
+    <!-- 1. HALAMAN UTAMA / SAMPUL -->
+    <div id="p-home" class="page active">
+        <h1 style="color: #007bff; font-size: 36px;">Selamat Datang di MPI</h1>
+        <p style="font-size: 18px; color: #555;">Materi: Pengenalan Tata Surya Kelompok 5</p>
+        <div style="margin-top: 50px;">
+            <button class="btn" onclick="bukaHalaman('p-menu')">Mulai Belajar</button>
         </div>
-        <div>
-          <h1 class="text-xl font-extrabold">Formula Dasar Excel</h1>
-          <p class="text-sm text-slate-500">Interaktif • Untuk siswa SMP Kelas 8 & 9</p>
+    </div>
+
+    <!-- 2. HALAMAN MENU UTAMA -->
+    <div id="p-menu" class="page">
+        <h2>Menu Utama</h2>
+        <p>Silakan pilih menu di bawah ini untuk memulai:</p>
+        <div class="menu-grid">
+            <button class="btn" onclick="bukaHalaman('p-materi')">📖 Baca Materi</button>
+            <button class="btn" onclick="bukaHalaman('p-kuis')">✏️ Mulai Kuis Interaktif</button>
+            <button class="btn" onclick="bukaHalaman('p-info')">ℹ️ Info Pengembang</button>
         </div>
-      </div>
-      <nav class="hidden sm:flex gap-3 items-center">
-        <button data-to="menu" class="nav-btn px-3 py-2 rounded-md text-sm bg-white shadow-sm hover:bg-sky-50">Menu</button>
-        <button data-to="materi" class="nav-btn px-3 py-2 rounded-md text-sm hover:bg-sky-50">Materi</button>
-        <button data-to="praktik" class="nav-btn px-3 py-2 rounded-md text-sm hover:bg-sky-50">Praktik</button>
-        <button data-to="kuis" class="nav-btn px-3 py-2 rounded-md text-sm hover:bg-sky-50">Kuis</button>
-      </nav>
-    </header>
+    </div>
 
-    <!-- Main content: slides -->
-    <main class="bg-white rounded-2xl shadow-lg overflow-hidden mb-6 mx-4">
-      <!-- COVER -->
-      <section id="cover" class="slide active p-8 text-center">
-        <div class="max-w-3xl mx-auto">
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-sky-700">Selamat Belajar Formula Dasar Excel!</h2>
-          <p class="mt-3 text-slate-600">Praktikkan rumus-rumus penting seperti SUM, AVERAGE, COUNT, dan lainnya langsung di simulator. Klik Play untuk mulai.</p>
-          <div class="mt-8 flex justify-center gap-4">
-            <button id="play-btn" class="bg-sky-600 text-white px-6 py-3 rounded-full font-semibold shadow hover:bg-sky-700">Play & Mulai</button>
-            <button data-to="menu" class="bg-white border border-sky-200 text-sky-700 px-6 py-3 rounded-full font-semibold hover:bg-sky-50">Buka Menu</button>
-          </div>
+    <!-- 3. HALAMAN MATERI -->
+    <div id="p-materi" class="page">
+        <h2>Materi Pembelajaran</h2>
+        <p><strong>Matahari sebagai Pusat Tata Surya:</strong> Matahari adalah bintang di pusat Tata Surya. Bentuknya nyaris bulat dan terdiri dari plasma panas bercampur medan magnet.</p>
+        <p>Planet terdekat dari matahari meliputi Merkurius, Venus, Bumi, dan Mars.</p>
+        <button class="btn btn-back" onclick="bukaHalaman('p-menu')">Kembali ke Menu</button>
+    </div>
+
+    <!-- 4. HALAMAN KUIS INTERAKTIF -->
+    <div id="p-kuis" class="page">
+        <h2>Kuis Kilat</h2>
+        <p>Apakah nama planet ketiga dari Matahari?</p>
+        <div style="margin-top: 20px;">
+            <button class="btn" onclick="cekJawaban(false, 'Jawabannya salah, coba lagi!')">A. Mars</button>
+            <button class="btn" onclick="cekJawaban(true, 'Benar sekali! Bumi adalah planet ketiga.')">B. Bumi</button>
+            <button class="btn" onclick="cekJawaban(false, 'Salah, Venus adalah planet kedua.')">C. Venus</button>
         </div>
-      </section>
-
-      <!-- MENU -->
-      <section id="menu" class="slide p-6">
-        <div class="max-w-4xl mx-auto">
-          <h3 class="text-xl font-bold text-sky-700">Menu</h3>
-          <p class="text-sm text-slate-600 mt-1">Pilih bagian yang ingin dipelajari:</p>
-
-          <div class="mt-6 grid gap-4 md:grid-cols-3">
-            <button data-to="materi" class="p-5 bg-white rounded-2xl shadow hover:shadow-md text-left">
-              <h4 class="font-bold text-sky-700">Materi Singkat</h4>
-              <p class="mt-2 text-sm text-slate-600">Penjelasan dan contoh 10 rumus penting untuk tugas sekolah.</p>
-            </button>
-
-            <button data-to="praktik" class="p-5 bg-white rounded-2xl shadow hover:shadow-md text-left">
-              <h4 class="font-bold text-sky-700">Praktik — Simulator</h4>
-              <p class="mt-2 text-sm text-slate-600">Tabel mini seperti Excel, masukkan rumus, jalankan dan lihat hasilnya.</p>
-            </button>
-
-            <button data-to="kuis" class="p-5 bg-white rounded-2xl shadow hover:shadow-md text-left">
-              <h4 class="font-bold text-sky-700">Kuis Mini</h4>
-              <p class="mt-2 text-sm text-slate-600">Uji pemahamanmu dengan 3 soal pilihan ganda.</p>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- MATERI -->
-      <section id="materi" class="slide p-6">
-        <div class="max-w-4xl mx-auto">
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="text-xl font-bold text-sky-700">Materi Singkat — Rumus Dasar</h3>
-              <p class="text-sm text-slate-600 mt-1">Contoh penulisan dan penjelasan sederhana untuk SMP.</p>
-            </div>
-            <button data-to="menu" class="text-sm text-sky-600 hover:underline">Kembali ke Menu</button>
-          </div>
-
-          <div class="mt-6 grid gap-4 md:grid-cols-2">
-            <!-- Core 5 -->
-            <div class="bg-white p-4 rounded-xl shadow">
-              <h4 class="font-bold text-sky-700">SUM</h4>
-              <p class="text-sm text-slate-600 mt-1">Menjumlahkan nilai dalam rentang sel.</p>
-              <code class="mt-2 block bg-sky-50 p-2 rounded text-sm">=SUM(A1:A5)</code>
-            </div>
-
-            <div class="bg-white p-4 rounded-xl shadow">
-              <h4 class="font-bold text-sky-700">AVERAGE</h4>
-              <p class="text-sm text-slate-600 mt-1">Menghitung rata-rata angka pada rentang.</p>
-              <code class="mt-2 block bg-sky-50 p-2 rounded text-sm">=AVERAGE(B2:B6)</code>
-            </div>
-
-            <div class="bg-white p-4 rounded-xl shadow">
-              <h4 class="font-bold text-sky-700">COUNT</h4>
-              <p class="text-sm text-slate-600 mt-1">Menghitung jumlah sel berisi angka pada rentang.</p>
-              <code class="mt-2 block bg-sky-50 p-2 rounded text-sm">=COUNT(C2:C6)</code>
-            </div>
-
-            <div class="bg-white p-4 rounded-xl shadow">
-              <h4 class="font-bold text-sky-700">MAX / MIN</h4>
-              <p class="text-sm text-slate-600 mt-1">Menemukan nilai terbesar (MAX) / terkecil (MIN).</p>
-              <code class="mt-2 block bg-sky-50 p-2 rounded text-sm">=MAX(D2:D6)</code>
-              <code class="mt-2 block bg-sky-50 p-2 rounded text-sm">=MIN(D2:D6)</code>
-            </div>
-
-            <!-- Conditional & Text -->
-            <div class="bg-white p-4 rounded-xl shadow">
-              <h4 class="font-bold text-sky-700">COUNTIF</h4>
-              <p class="text-sm text-slate-600 mt-1">Menghitung sel yang memenuhi kriteria.</p>
-              <code class="mt-2 block bg-sky-50 p-2 rounded text-sm">=COUNTIF(B2:B6,"Buku")</code>
-            </div>
-
-            <div class="bg-white p-4 rounded-xl shadow">
-              <h4 class="font-bold text-sky-700">SUMIF</h4>
-              <p class="text-sm text-slate-600 mt-1">Menjumlahkan angka jika kriteria terpenuhi.</p>
-              <code class="mt-2 block bg-sky-50 p-2 rounded text-sm">=SUMIF(B2:B6,"Buku",D2:D6)</code>
-            </div>
-
-            <div class="bg-white p-4 rounded-xl shadow">
-              <h4 class="font-bold text-sky-700">Fungsi TEXT</h4>
-              <p class="text-sm text-slate-600 mt-1">Mengubah atau mengambil teks: UPPER, LOWER, LEFT, RIGHT, MID.</p>
-              <code class="mt-2 block bg-sky-50 p-2 rounded text-sm">=UPPER(A2)</code>
-              <code class="mt-2 block bg-sky-50 p-2 rounded text-sm">=LEFT(A2,3)</code>
-            </div>
-          </div>
-
-          <div class="mt-6 text-sm text-slate-500">
-            <strong>Catatan singkat:</strong> COUNT menghitung sel yang berisi angka. Jika ingin menghitung sel berisi apapun (termasuk teks) gunakan COUNTA.
-          </div>
-        </div>
-      </section>
-
-      <!-- PRAKTIK / SIMULATOR -->
-      <section id="praktik" class="slide p-6">
-        <div class="max-w-4xl mx-auto">
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="text-xl font-bold text-sky-700">Simulator Spreadsheet</h3>
-              <p class="text-sm text-slate-600 mt-1">Klik sel untuk mengedit. Ketik rumus pada input lalu klik "Jalankan".</p>
-            </div>
-            <div class="flex gap-3 items-center">
-              <button data-to="menu" class="text-sm text-sky-600 hover:underline">Kembali ke Menu</button>
-            </div>
-          </div>
-
-          <!-- Table -->
-          <div class="mt-5 overflow-x-auto">
-            <table class="sheet bg-white">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>A</th>
-                  <th>B</th>
-                  <th>C</th>
-                  <th>D</th>
-                </tr>
-              </thead>
-              <tbody id="sheet-body">
-                <!-- Rows will be generated by JS -->
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Formula input area -->
-          <div class="mt-4 bg-sky-50 p-4 rounded-lg flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div class="flex-1">
-              <label class="text-sm font-semibold text-slate-700">Input Rumus</label>
-              <input id="formula-input" class="formula-input mt-2 w-full rounded-lg border border-sky-100 px-3 py-2 bg-white" placeholder='Contoh: =SUM(B2:B5) atau =COUNTIF(B2:B6,"Buku")' />
-              <p class="text-xs text-slate-500 mt-1">Case-insensitive. Pilih target untuk menaruh hasil (opsional):</p>
-            </div>
-
-            <div class="w-full sm:w-64">
-              <label class="text-sm font-semibold text-slate-700">Tulis hasil ke sel (opsional)</label>
-              <select id="target-cell" class="mt-2 w-full rounded-lg border border-sky-100 px-2 py-2 bg-white">
-                <option value="">(Tampilkan di bawah input)</option>
-              </select>
-            </div>
-
-            <div class="sm:w-48 flex gap-2 mt-2 sm:mt-0">
-              <button id="run-formula" class="bg-excel text-white px-4 py-2 rounded-lg hover:bg-green-700" style="background:var(--excel)">Jalankan / Hitung</button>
-              <button id="clear-highlights" class="bg-white border border-sky-100 px-4 py-2 rounded-lg hover:bg-sky-50">Bersihkan</button>
-            </div>
-          </div>
-
-          <!-- Result panel -->
-          <div id="result-panel" class="mt-3 hidden rounded-lg p-4 bg-white shadow-sm">
-            <strong id="result-title" class="text-sky-700"></strong>
-            <p id="result-text" class="text-slate-600 mt-1"></p>
-          </div>
-
-          <!-- Example buttons -->
-          <div class="mt-4 flex flex-wrap gap-2">
-            <button class="example px-3 py-1 bg-white rounded-full border text-sm">=SUM(B2:B5)</button>
-            <button class="example px-3 py-1 bg-white rounded-full border text-sm">=AVERAGE(D2:D6)</button>
-            <button class="example px-3 py-1 bg-white rounded-full border text-sm">=COUNTIF(B2:B6,"Buku")</button>
-            <button class="example px-3 py-1 bg-white rounded-full border text-sm">=UPPER(A2)</button>
-            <button class="example px-3 py-1 bg-white rounded-full border text-sm">=LEFT(A2,3)</button>
-          </div>
-
-          <div class="mt-6 text-sm text-slate-500">
-            Petunjuk: Anda dapat mengubah angka pada tabel lalu jalankan rumus untuk melihat hasil secara nyata. Rentang yang dikenali: A1 sampai D6.
-          </div>
-        </div>
-      </section>
-
-      <!-- KUIS -->
-      <section id="kuis" class="slide p-6">
-        <div class="max-w-4xl mx-auto">
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="text-xl font-bold text-sky-700">Kuis Mini</h3>
-              <p class="text-sm text-slate-600 mt-1">Pilih jawaban lalu lihat feedback instan.</p>
-            </div>
-            <button data-to="menu" class="text-sm text-sky-600 hover:underline">Kembali ke Menu</button>
-          </div>
-
-          <div class="mt-6 grid gap-4 md:grid-cols-3">
-            <!-- Q1 -->
-            <article class="p-4 bg-white rounded-lg shadow">
-              <div class="text-xs font-bold uppercase text-sky-600 rounded-full inline-block px-2 py-1">Soal 1</div>
-              <h4 class="mt-3 font-semibold">Rumus mana yang menghitung rata-rata nilai pada B2:B6?</h4>
-              <div class="mt-3 space-y-2" data-q="q1">
-                <button data-correct="false" class="option w-full text-left px-3 py-2 rounded border">=SUM(B2:B6)</button>
-                <button data-correct="true" class="option w-full text-left px-3 py-2 rounded border">=AVERAGE(B2:B6)</button>
-                <button data-correct="false" class="option w-full text-left px-3 py-2 rounded border">=COUNT(B2:B6)</button>
-              </div>
-              <div class="mt-2 text-sm hidden explanation"></div>
-            </article>
-
-            <!-- Q2 -->
-            <article class="p-4 bg-white rounded-lg shadow">
-              <div class="text-xs font-bold uppercase text-sky-600 rounded-full inline-block px-2 py-1">Soal 2</div>
-              <h4 class="mt-3 font-semibold">=COUNTIF(C2:C6,"Lunas") digunakan untuk?</h4>
-              <div class="mt-3 space-y-2" data-q="q2">
-                <button data-correct="true" class="option w-full text-left px-3 py-2 rounded border">Menghitung berapa sel di C2:C6 yang bernilai "Lunas"</button>
-                <button data-correct="false" class="option w-full text-left px-3 py-2 rounded border">Menjumlahkan nilai pada C2:C6</button>
-                <button data-correct="false" class="option w-full text-left px-3 py-2 rounded border">Mengganti teks menjadi huruf besar</button>
-              </div>
-              <div class="mt-2 text-sm hidden explanation"></div>
-            </article>
-
-            <!-- Q3 -->
-            <article class="p-4 bg-white rounded-lg shadow">
-              <div class="text-xs font-bold uppercase text-sky-600 rounded-full inline-block px-2 py-1">Soal 3</div>
-              <h4 class="mt-3 font-semibold">Fungsi LEFT(A2,2) akan menghasilkan?</h4>
-              <div class="mt-3 space-y-2" data-q="q3">
-                <button data-correct="true" class="option w-full text-left px-3 py-2 rounded border">2 karakter pertama dari isi sel A2</button>
-                <button data-correct="false" class="option w-full text-left px-3 py-2 rounded border">2 karakter terakhir dari isi sel A2</button>
-                <button data-correct="false" class="option w-full text-left px-3 py-2 rounded border">Semua teks menjadi huruf kecil</button>
-              </div>
-              <div class="mt-2 text-sm hidden explanation"></div>
-            </article>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="px-4 py-6 text-center">
-      <small>Belajar Formula Dasar Excel — Interaktif • Buat latihan & eksplorasi sendiri</small>
-    </footer>
-  </div>
-
-  <!-- JavaScript: seluruh file self-contained -->
-  <script>
-    /*****************************************************************************
-     * Simple Single-Page "slides" navigation
-     *****************************************************************************/
-    document.querySelectorAll('[data-to]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const dest = e.currentTarget.getAttribute('data-to');
-        goTo(dest);
-      });
-    });
-    document.getElementById('play-btn').addEventListener('click', () => goTo('menu'));
-
-    function goTo(id) {
-      document.querySelectorAll('.slide').forEach(s => s.classList.toggle('active', s.id === id));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    /*****************************************************************************
-     * Build the sheet (A-D, 1-6) and fill sample data. Cells are contenteditable.
-     * We'll create IDs like A1, B2 to read/write easily.
-     *****************************************************************************/
-    const cols = ['A','B','C','D'];
-    const rows = [1,2,3,4,5,6];
-    const sheetBody = document.getElementById('sheet-body');
-    // Some sample numeric/text data (values chosen to be realistic for tasks)
-    const sample = {
-      A2: 'Rina', A3: 'Budi', A4: 'Sari', A5: 'Ika', A6: 'Andi',
-      B2: 'Buku', B3: 'Alat Tulis', B4: 'Buku', B5: 'Buku', B6: 'Alat Tulis',
-      C2: 'Lunas', C3: 'Belum', C4: 'Lunas', C5: 'Lunas', C6: 'Belum',
-      D2: 78, D3: 65, D4: 90, D5: 82, D6: 70
-    };
-
-    // Helper to fill target select for output cells
-    const targetSelect = document.getElementById('target-cell');
-    function populateTargetOptions() {
-      targetSelect.innerHTML = '<option value="">(Tampilkan di bawah input)</option>';
-      for (let r of rows) {
-        for (let c of cols) {
-          const key = c + r;
-          const opt = document.createElement('option');
-          opt.value = key;
-          opt.textContent = key;
-          targetSelect.appendChild(opt);
-        }
-      }
-    }
-    populateTargetOptions();
-
-    // Build table rows
-    rows.forEach(r => {
-      const tr = document.createElement('tr');
-      const th = document.createElement('th');
-      th.textContent = r;
-      tr.appendChild(th);
-
-      cols.forEach(c => {
-        const td = document.createElement('td');
-        const key = c + r;
-        // Only make data cells editable for student input (not header row 1 if you want)
-        // We'll make all body cells editable so students can try any cell.
-        td.setAttribute('contenteditable', 'true');
-        td.setAttribute('spellcheck', 'false');
-        td.dataset.cell = key;
-        const val = (sample[key] !== undefined) ? sample[key] : '';
-        td.innerText = val;
-        tr.appendChild(td);
-      });
-
-      sheetBody.appendChild(tr);
-    });
-
-    /*****************************************************************************
-     * Utility functions to read/write sheet values
-     *****************************************************************************/
-    function readCell(key) {
-      // key e.g., "B2"
-      const el = document.querySelector('[data-cell="' + key + '"]');
-      if (!el) return '';
-      const text = el.innerText.trim();
-      // Try to parse number (if it looks numeric)
-      const num = Number(text.replace(/,/g, '')); // allow commas
-      if (!isNaN(num) && text !== '') return num;
-      return text;
-    }
-
-    function writeCell(key, value) {
-      const el = document.querySelector('[data-cell="' + key + '"]');
-      if (!el) return;
-      el.innerText = value;
-    }
-
-    function clearHighlights() {
-      document.querySelectorAll('.cell-highlight').forEach(e => e.classList.remove('cell-highlight'));
-    }
-
-    /*****************************************************************************
-     * Parse ranges like B2:B5 and return list of keys (only handle A-D,1-6)
-     *****************************************************************************/
-    function keysInRange(rangeStr) {
-      // Expect format "A1" or "A1:B5"
-      rangeStr = rangeStr.toUpperCase();
-      if (!rangeStr.includes(':')) {
-        // single cell
-        return isValidCell(rangeStr) ? [rangeStr] : [];
-      }
-      const [start, end] = rangeStr.split(':').map(s => s.trim());
-      if (!isValidCell(start) || !isValidCell(end)) return [];
-      const startCol = start[0].charCodeAt(0);
-      const endCol = end[0].charCodeAt(0);
-      const startRow = parseInt(start.slice(1), 10);
-      const endRow = parseInt(end.slice(1), 10);
-      const keys = [];
-      for (let c = Math.min(startCol,endCol); c <= Math.max(startCol,endCol); c++) {
-        for (let r = Math.min(startRow,endRow); r <= Math.max(startRow,endRow); r++) {
-          const key = String.fromCharCode(c) + r;
-          if (isValidCell(key)) keys.push(key);
-        }
-      }
-      return keys;
-    }
-
-    function isValidCell(key) {
-      if (!/^[A-D][1-6]$/.test(key)) return false;
-      return true;
-    }
-
-    /*****************************************************************************
-     * Highlight a range visually (adds class to DOM)
-     *****************************************************************************/
-    function highlightRange(keys) {
-      clearHighlights();
-      keys.forEach(k => {
-        const el = document.querySelector('[data-cell="' + k + '"]');
-        if (el) el.classList.add('cell-highlight');
-      });
-    }
-
-    /*****************************************************************************
-     * FORMULA PARSING & EVALUATION
-     * Supported functions:
-     *  SUM(range), AVERAGE(range), COUNT(range) [counts numeric], MAX(range), MIN(range)
-     *  COUNTIF(range,criteria)
-     *  SUMIF(range,criteria,sum_range)
-     *  UPPER(cell), LOWER(cell), LEFT(cell,n), RIGHT(cell,n), MID(cell,start,len)
-     *
-     * Basic criteria allowed for COUNTIF/SUMIF:
-     *  - exact text: "Buku"
-     *  - comparison: ">80", "<=70", "<>Lunas"
-     *
-     *****************************************************************************/
-
-    // Helpers for criteria evaluation
-    function matchCriteria(value, criteria) {
-      // value may be number or string
-      if (typeof criteria !== 'string') return false;
-      criteria = criteria.trim();
-      // comparison operators: > >= < <= <>
-      const compMatch = criteria.match(/^([<>]=?|<>)(.*)$/);
-      if (compMatch) {
-        const op = compMatch[1];
-        const right = compMatch[2].trim();
-        const rightNum = Number(right);
-        // if both sides numeric, do numeric comparison
-        if (!isNaN(rightNum) && typeof value === 'number') {
-          switch(op) {
-            case '>': return value > rightNum;
-            case '<': return value < rightNum;
-            case '>=': return value >= rightNum;
-            case '<=': return value <= rightNum;
-            case '<>': return value !== rightNum;
-          }
-        } else {
-          // compare as strings
-          const leftStr = String(value).toLowerCase();
-          const rightStr = right.toLowerCase();
-          switch(op) {
-            case '<>': return leftStr !== rightStr;
-            case '=': return leftStr === rightStr;
-            default:
-              // other numeric comparisons on non-number -> false
-              return false;
-          }
-        }
-      }
-
-      // default: equality (text or number)
-      if (!isNaN(Number(criteria)) && typeof value === 'number') {
-        return value === Number(criteria);
-      }
-      return String(value).toLowerCase() === criteria.toLowerCase();
-    }
-
-    function evaluateFormula(formula) {
-      // sanitize and trim
-      formula = String(formula || '').trim();
-      if (!formula.startsWith('=')) return { ok:false, message: 'Rumus harus diawali dengan tanda =.' };
-
-      // remove outer = and surrounding spaces
-      const expr = formula.slice(1).trim();
-
-      // Regex matching for functions: functionName(arg1,arg2,...)
-      const fnMatch = expr.match(/^([A-Z]+)\s*\(\s*(.*)\s*\)$/i);
-      if (!fnMatch) {
-        return { ok:false, message: 'Format rumus belum dikenali. Contoh: =SUM(B2:B5)' };
-      }
-
-      const fnName = fnMatch[1].toUpperCase();
-      // split arguments but respect commas inside quotes
-      const argsRaw = splitArgs(fnMatch[2]);
-
-      // Evaluate supported functions
-      const supported = ['SUM','AVERAGE','COUNT','MAX','MIN','COUNTIF','SUMIF','UPPER','LOWER','LEFT','RIGHT','MID'];
-      if (!supported.includes(fnName)) {
-        return { ok:false, message: 'Fungsi tidak didukung pada simulator ini: ' + fnName };
-      }
-
-      // Utility to get numeric values from a range
-      const getNumericValuesFromRange = (rangeStr) => {
-        const keys = keysInRange(rangeStr);
-        const values = keys.map(k => readCell(k)).filter(v => typeof v === 'number');
-        return { keys, values };
-      };
-
-      try {
-        // Implementations
-        if (['SUM','AVERAGE','COUNT','MAX','MIN'].includes(fnName)) {
-          if (argsRaw.length !== 1) return { ok:false, message: fnName + ' membutuhkan satu argumen rentang seperti A1:A5.' };
-          const range = argsRaw[0];
-          const { keys, values } = getNumericValuesFromRange(range);
-          highlightRange(keys);
-          if (fnName === 'SUM') {
-            const total = values.reduce((s,v) => s+v, 0);
-            return { ok:true, title: 'Hasil SUM: ' + formatNumber(total), text: 'Menjumlahkan ' + values.length + ' angka.', value: total };
-          }
-          if (fnName === 'AVERAGE') {
-            if (values.length === 0) return { ok:false, message: 'Tidak ada angka pada rentang.' };
-            const avg = values.reduce((s,v) => s+v, 0) / values.length;
-            return { ok:true, title: 'Hasil AVERAGE: ' + formatNumber(avg), text: 'Rata-rata dari ' + values.length + ' angka.', value: avg };
-          }
-          if (fnName === 'COUNT') {
-            // COUNT counts numbers
-            return { ok:true, title: 'Hasil COUNT: ' + values.length, text: 'Jumlah sel berisi angka: ' + values.length, value: values.length };
-          }
-          if (fnName === 'MAX') {
-            if (values.length === 0) return { ok:false, message: 'Tidak ada angka pada rentang.' };
-            const max = Math.max(...values);
-            return { ok:true, title: 'Hasil MAX: ' + formatNumber(max), text: 'Nilai terbesar: ' + max, value: max };
-          }
-          if (fnName === 'MIN') {
-            if (values.length === 0) return { ok:false, message: 'Tidak ada angka pada rentang.' };
-            const min = Math.min(...values);
-            return { ok:true, title: 'Hasil MIN: ' + formatNumber(min), text: 'Nilai terkecil: ' + min, value: min };
-          }
-        }
-
-        if (fnName === 'COUNTIF') {
-          if (argsRaw.length !== 2) return { ok:false, message: 'COUNTIF membutuhkan dua argumen: range dan kriteria.' };
-          const range = argsRaw[0];
-          let criteria = argsRaw[1];
-          // if criteria enclosed in quotes, remove them
-          criteria = stripQuotes(criteria);
-          const keys = keysInRange(range);
-          highlightRange(keys);
-          let count = 0;
-          keys.forEach(k => {
-            const v = readCell(k);
-            if (matchCriteria(v, criteria)) count++;
-          });
-          return { ok:true, title: 'Hasil COUNTIF: ' + count, text: 'Jumlah sel memenuhi kriteria "' + criteria + '": ' + count, value: count };
-        }
-
-        if (fnName === 'SUMIF') {
-          // SUMIF(range, criteria, sum_range)
-          if (argsRaw.length < 2) return { ok:false, message: 'SUMIF membutuhkan setidaknya range dan kriteria, misal: SUMIF(B2:B6,"Buku",D2:D6)' };
-          const criteriaRange = argsRaw[0];
-          let criteria = stripQuotes(argsRaw[1]);
-          // If sum_range provided, use it; otherwise sum the criteriaRange numeric cells
-          const sumRange = argsRaw[2] || criteriaRange;
-          const keysCriteria = keysInRange(criteriaRange);
-          const keysSum = keysInRange(sumRange);
-          highlightRange([...new Set([...keysCriteria, ...keysSum])]);
-          let total = 0;
-          keysCriteria.forEach((k, idx) => {
-            const vcrit = readCell(k);
-            if (matchCriteria(vcrit, criteria)) {
-              const sumKey = keysSum[idx];
-              if (sumKey) {
-                const v = readCell(sumKey);
-                if (typeof v === 'number') total += v;
-              }
-            }
-          });
-          return { ok:true, title: 'Hasil SUMIF: ' + formatNumber(total), text: 'Menjumlahkan nilai pada rentang sesuai kriteria "' + criteria + '".', value: total };
-        }
-
-        // TEXT functions
-        if (['UPPER','LOWER'].includes(fnName)) {
-          if (argsRaw.length !== 1) return { ok:false, message: fnName + ' membutuhkan satu argumen (sel).' };
-          const cell = argsRaw[0].toUpperCase();
-          if (!isValidCell(cell)) return { ok:false, message: 'Argumen harus referensi sel seperti A2.' };
-          highlightRange([cell]);
-          const v = readCell(cell);
-          const text = String(v);
-          const out = fnName === 'UPPER' ? text.toUpperCase() : text.toLowerCase();
-          return { ok:true, title: fnName + ' → ' + out, text: 'Mengubah teks pada ' + cell + '.', value: out };
-        }
-
-        if (fnName === 'LEFT' || fnName === 'RIGHT') {
-          if (argsRaw.length !== 2) return { ok:false, message: fnName + ' membutuhkan dua argumen: sel dan jumlah karakter.' };
-          const cell = argsRaw[0].toUpperCase();
-          const n = Number(argsRaw[1]);
-          if (!isValidCell(cell) || isNaN(n) || n < 0) return { ok:false, message: 'Gunakan format misal LEFT(A2,3).' };
-          highlightRange([cell]);
-          const v = String(readCell(cell));
-          const out = (fnName === 'LEFT') ? v.slice(0, n) : v.slice(-n);
-          return { ok:true, title: fnName + ' → ' + out, text: fnName + ' mengambil ' + n + ' karakter.', value: out };
-        }
-
-        if (fnName === 'MID') {
-          if (argsRaw.length !== 3) return { ok:false, message: 'MID membutuhkan tiga argumen: sel, posisi_mulai, jumlah.' };
-          const cell = argsRaw[0].toUpperCase();
-          const start = Number(argsRaw[1]);
-          const count = Number(argsRaw[2]);
-          if (!isValidCell(cell) || isNaN(start) || isNaN(count) || start <= 0 || count < 0) return { ok:false, message: 'Gunakan format misal MID(A2,2,3).' };
-          highlightRange([cell]);
-          const v = String(readCell(cell));
-          const out = v.slice(start - 1, start - 1 + count);
-          return { ok:true, title: 'MID → ' + out, text: 'Mengambil ' + count + ' karakter mulai dari posisi ' + start + '.', value: out };
-        }
-
-      } catch (err) {
-        return { ok:false, message: 'Terjadi kesalahan saat menghitung: ' + String(err) };
-      }
-
-      return { ok:false, message: 'Rumus tidak dapat dieksekusi.' };
-    }
-
-    // Helper: split args while keeping commas inside quotes intact
-    function splitArgs(str) {
-      const args = [];
-      let current = '';
-      let inQuotes = false;
-      for (let i = 0; i < str.length; i++) {
-        const ch = str[i];
-        if (ch === '"' ) {
-          inQuotes = !inQuotes;
-          current += ch;
-        } else if (ch === ',' && !inQuotes) {
-          args.push(current.trim());
-          current = '';
-        } else {
-          current += ch;
-        }
-      }
-      if (current.trim() !== '') args.push(current.trim());
-      return args;
-    }
-
-    function stripQuotes(s) {
-      s = s.trim();
-      if ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))) {
-        return s.slice(1, -1);
-      }
-      return s;
-    }
-
-    function formatNumber(n) {
-      if (typeof n === 'number' && !Number.isInteger(n)) {
-        return n.toLocaleString('id-ID', { maximumFractionDigits: 2 });
-      }
-      if (typeof n === 'number') return n.toLocaleString('id-ID');
-      return String(n);
-    }
-
-    /*****************************************************************************
-     * Wire up UI controls: run formula, examples, clear highlights, write to target cell
-     *****************************************************************************/
-    const runBtn = document.getElementById('run-formula');
-    const input = document.getElementById('formula-input');
-    const resultPanel = document.getElementById('result-panel');
-    const resultTitle = document.getElementById('result-title');
-    const resultText = document.getElementById('result-text');
-
-    runBtn.addEventListener('click', () => {
-      clearHighlights();
-      resultPanel.classList.add('hidden');
-
-      const formula = input.value.trim();
-      if (!formula) {
-        showResult(false, 'Masukkan rumus terlebih dahulu.', 'Contoh: =SUM(B2:B5) atau =COUNTIF(B2:B6,"Buku")');
-        return;
-      }
-
-      const res = evaluateFormula(formula);
-      if (!res.ok) {
-        showResult(false, 'Kesalahan: ' + (res.message || 'Format salah.'), '');
-        return;
-      }
-
-      // Show result and optionally write to a target cell
-      const target = targetSelect.value;
-      if (target) {
-        // If result.value is numeric or string, write into that cell
-        writeCell(target, (res.value !== undefined) ? res.value : '');
-        // small visual feedback: flash the target cell
-        const el = document.querySelector('[data-cell="' + target + '"]');
-        if (el) {
-          el.classList.add('cell-highlight');
-          setTimeout(() => el.classList.remove('cell-highlight'), 1200);
-        }
-        showResult(true, res.title, (res.text || '') + ' Hasil ditulis ke sel ' + target + '.');
-      } else {
-        // display below input
-        showResult(true, res.title, res.text || '');
-      }
-    });
-
-    document.getElementById('clear-highlights').addEventListener('click', () => {
-      clearHighlights();
-      resultPanel.classList.add('hidden');
-    });
-
-    // Example buttons fill input
-    document.querySelectorAll('.example').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        input.value = e.currentTarget.textContent.trim();
-        input.focus();
-      });
-    });
-
-    // showResult helper
-    function showResult(ok, title, text) {
-      resultPanel.classList.remove('hidden');
-      resultTitle.textContent = title || '';
-      resultText.textContent = text || '';
-      resultPanel.classList.toggle('answer-correct', ok);
-      resultPanel.classList.toggle('answer-wrong', !ok);
-    }
-
-    /*****************************************************************************
-     * KUIS: simple instant feedback with explanation
-     *****************************************************************************/
-    document.querySelectorAll('.option').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const group = e.currentTarget.closest('[data-q]');
-        if (!group) return;
-        if (group.dataset.answered) return; // prevent re-answer
-        group.dataset.answered = 'true';
-
-        // mark correct options green, wrong red for chosen
-        const options = group.querySelectorAll('.option');
-        options.forEach(o => {
-          o.disabled = true;
-          if (o.dataset.correct === 'true') {
-            o.classList.add('answer-correct');
-          }
+        <div id="feedback" class="quiz-feedback"></div>
+        <button class="btn btn-back" onclick="bukaHalaman('p-menu')">Kembali ke Menu</button>
+    </div>
+
+    <!-- 5. HALAMAN INFO PENGEMBANG -->
+    <div id="p-info" class="page">
+        <h2>Informasi Aplikasi</h2>
+        <p>Media Pembelajaran Interaktif ini dikembangkan untuk mempermudah proses belajar mengajar mandiri secara digital.</p>
+        <p><strong>Dibuat oleh:</strong> Guru Inovatif</p>
+        <button class="btn btn-back" onclick="bukaHalaman('p-menu')">Kembali ke Menu</button>
+    </div>
+
+</div>
+
+<script>
+    // JAVASCRIPT LOGIC UNTUK INTERAKTIVITAS
+
+    // Fungsi utama untuk berpindah halaman/slide
+    function bukaHalaman(idHalaman) {
+        // Cari semua elemen yang memiliki class 'page' lalu sembunyikan
+        let seluruhHalaman = document.querySelectorAll('.page');
+        seluruhHalaman.forEach(hlm => {
+            hlm.classList.remove('active');
         });
-        if (e.currentTarget.dataset.correct !== 'true') {
-          e.currentTarget.classList.add('answer-wrong');
-          const expl = group.parentElement.querySelector('.explanation');
-          if (expl) {
-            expl.classList.remove('hidden');
-            expl.innerText = 'Jawaban salah — perhatikan fungsi yang digunakan: baca kembali contoh di Materi.';
-          }
-        } else {
-          const expl = group.parentElement.querySelector('.explanation');
-          if (expl) {
-            expl.classList.remove('hidden');
-            expl.innerText = 'Benar! Penjelasan singkat: fungsi ini melakukan apa yang tertulis pada namanya.';
-          }
+
+        // Tampilkan halaman spesifik yang di-klik user
+        document.getElementById(idHalaman).classList.add('active');
+        
+        // Reset feedback kuis jika user membuka kembali halaman kuis
+        if(idHalaman !== 'p-kuis') {
+            document.getElementById('feedback').innerText = '';
         }
-      });
-    });
+    }
 
-    /*****************************************************************************
-     * Accessibility and small enhancements
-     *****************************************************************************/
-    // Press Enter inside input triggers run
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        runBtn.click();
-      }
-    });
+    // Fungsi mengecek jawaban kuis
+    function cekJawaban(apakahBenar, pesan) {
+        let feedbackBox = document.getElementById('feedback');
+        feedbackBox.innerText = pesan;
+        if(apakahBenar) {
+            feedbackBox.style.color = '#28a745';
+        } else {
+            feedbackBox.style.color = '#dc3545';
+        }
+    }
+</script>
 
-    // When DOM loaded, scroll to top
-    window.addEventListener('load', () => window.scrollTo(0,0));
-  </script>
 </body>
 </html>
