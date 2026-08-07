@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="id">
+ <head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260807-01-6a28f05","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YAHO2-t-jNE,0","Arial":"YAGyDvJ_4Ts,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Canva Sans":"YAFLd8sKbwc,2","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAHO2VMiyZo,0","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAEul-FRQw4,0","Georgia":"YAGzXkO0pEM,0","Helvetica Neue":"YAFcf6CtJfI,0","Impact":"YAFcfnjI7Vk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YAHO2a5g66Q,0","JetBrains Mono":"YAFdJksXcAk,0","Libre Baskerville":"YACgEUFdPdA,0","Manrope":"YAHO2b2feC4,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YADLjI9qxTA,0","Nunito":"YACgEX8C5Gg,0","Oleo Script":"YACgEQQ14jI,0","Phantom Sans":"YAHO2E8Pb88,0","Playfair Display":"YACgEYmuCJE,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YADWjpfPmdk,0","Raleway":"YACgEVg3xZg,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Spectral":"YAHO2rVUHIM,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Ubuntu":"YACgERDU--Q,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YADlN8CFZ8Q,0","ui-sans-serif":"YACkoN-xg4g,0"}}');</script><script src="/_sdk/7949ff62d67710d5.telemetry_sdk.js" integrity="sha512-KIvXA82Di44YY/RH9/63A9MuTuavYgDFG8PfErJn7Wli4K0LAOk+coo/aPXk3+ZNL96nHh9VYD4PE+fLes+laQ=="></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Belajar Formula Excel</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sky: #1787d8;
+      --deep: #0b63aa;
+      --excel: #167c4b;
+      --ink: #17324d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    .app-shell {
+      width: 100%;
+      min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+      background-color: #f4faff;
+      background-image:
+        linear-gradient(rgba(23, 135, 216, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 135, 216, .045) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+      overflow-y: auto;
+      padding: 28px 20px;
+      animation: slideIn .42s ease both;
+    }
+
+    .slide.active { display: flex; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(22px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      opacity: .24;
+      pointer-events: none;
+    }
+
+    .formula-card,
+    .menu-card {
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .formula-card:hover,
+    .menu-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 34px rgba(30, 107, 157, .15);
+    }
+
+    .spreadsheet {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      min-width: 680px;
+      border: 1px solid #cfe3f2;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .spreadsheet th,
+    .spreadsheet td {
+      border-right: 1px solid #dbeaf4;
+      border-bottom: 1px solid #dbeaf4;
+      height: 42px;
+      padding: 8px 12px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .spreadsheet tr:last-child td,
+    .spreadsheet tr:last-child th { border-bottom: 0; }
+
+    .spreadsheet th:last-child,
+    .spreadsheet td:last-child { border-right: 0; }
+
+    .corner,
+    .col {
+      background: #eaf6ff;
+      color: #24628c;
+      font-weight: 800;
+    }
+
+    .row {
+      background: #f8fcff;
+      color: #5f7f97;
+      font-weight: 700;
+    }
+
+    .cell {
+      background: #ffffff;
+      font-weight: 600;
+    }
+
+    .active-range {
+      background: #fff9d8 !important;
+      outline: 2px solid #f2c94c;
+      outline-offset: -2px;
+    }
+
+    .quiz-option {
+      border: 2px solid #dbeaf4;
+      transition: .18s;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      border-color: #1787d8;
+      background: #eff9ff;
+    }
+
+    .quiz-option.correct {
+      background: #e8f8ef;
+      border-color: #22a562;
+      color: #125d39;
+    }
+
+    .quiz-option.incorrect {
+      background: #fff0f1;
+      border-color: #e45563;
+      color: #9a2734;
+    }
+
+    .feedback-show {
+      display: flex !important;
+      animation: reveal .25s ease;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .example-button {
+      transition: transform .18s ease, background .18s ease;
+    }
+
+    .example-button:hover {
+      transform: translateY(-2px);
+      background: #dff3ff;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #f2c94c;
+      outline-offset: 3px;
+    }
+
+    code {
+      word-break: break-word;
+    }
+  </style>
+  <script src="/_sdk/0e8d3a91e1c6f495.data_sdk.js" type="text/javascript" integrity="sha512-c00oDoGjsMgluCLLEyVl3suwEkgjOGGplVFbsilUoBg4aMKNmsL3mwsc9r0dPn95qiSZyjBousQXgROkAW7p/w=="></script>
+  <script src="/_sdk/04cc6185e046f597.resizing_sdk.js" type="text/javascript" integrity="sha512-CiE/G92aQF0nxneFg1kdOvXih8sQ1Z2a2QI3+r/WvzJwQqH6+IyB3iL07OkJmpm3ABAaf07+FnqWny98f5sR6w=="></script>
+ </head>
+ <body data-template-id="__page-root">
+  <div class="app-shell">
+   <main aria-label="Modul belajar Formula Excel">
+    <section id="cover" class="slide active relative items-center justify-center overflow-hidden">
+     <div class="orb h-72 w-72 -right-20 -top-20 bg-white"></div>
+     <div class="orb h-56 w-56 -bottom-16 left-8 bg-green-300"></div>
+     <div data-template-id="cover-panel" class="canva-panel relative w-full max-w-3xl rounded-[36px] px-7 py-12 text-center shadow-2xl sm:px-14">
+      <div data-template-id="class-badge" class="canva-tag mx-auto inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold"><i data-lucide="graduation-cap" class="h-4 w-4"></i>
+      </div>
+      <div class="mx-auto mt-8 flex h-20 w-20 items-center justify-center rounded-3xl bg-green-100 text-green-700"><i data-lucide="sheet" class="h-10 w-10"></i>
+      </div>
+      <h1 data-template-id="page-title" class="canva-text mt-7 font-extrabold leading-tight"></h1>
+      <p data-template-id="page-subtitle" class="canva-text mx-auto mt-4 max-w-xl leading-relaxed"></p><button id="play-button" data-template-id="play-button" type="button" class="canva-button mt-9 inline-flex items-center gap-3 rounded-2xl px-7 py-4 font-bold shadow-lg transition hover:-translate-y-1"> <i data-lucide="play" class="h-5 w-5 fill-current"></i> </button>
+     </div>
+    </section>
+    <section id="menu" class="slide items-center justify-center">
+     <div class="w-full max-w-6xl">
+      <header class="text-center">
+       <p data-template-id="menu-kicker" class="canva-text font-bold uppercase tracking-[.2em]"></p>
+       <h2 data-template-id="menu-title" class="canva-text mt-3 font-extrabold"></h2>
+       <p data-template-id="menu-helper" class="canva-text mx-auto mt-3 max-w-xl"></p>
+      </header>
+      <div class="mt-10 grid gap-5 md:grid-cols-3"><button id="menu-materi" data-template-id="menu-materi" type="button" class="canva-card menu-card rounded-[28px] p-7 text-left shadow-lg"> <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-100 text-sky-700"> <i data-lucide="book-open" class="h-7 w-7"></i> </span> <span data-template-id="menu-materi-title" class="canva-text mt-7 block font-extrabold"></span> <span data-template-id="menu-materi-desc" class="canva-text mt-3 block leading-relaxed"></span> <span class="mt-7 inline-flex items-center gap-2 font-bold text-sky-700">Buka <i data-lucide="arrow-right" class="h-4 w-4"></i></span> </button> <button id="menu-praktik" data-template-id="menu-praktik" type="button" class="canva-card menu-card rounded-[28px] p-7 text-left shadow-lg"> <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 text-green-700"> <i data-lucide="calculator" class="h-7 w-7"></i> </span> <span data-template-id="menu-praktik-title" class="canva-text mt-7 block font-extrabold"></span> <span data-template-id="menu-praktik-desc" class="canva-text mt-3 block leading-relaxed"></span> <span class="mt-7 inline-flex items-center gap-2 font-bold text-green-700">Buka <i data-lucide="arrow-right" class="h-4 w-4"></i></span> </button> <button id="menu-kuis" data-template-id="menu-kuis" type="button" class="canva-card menu-card rounded-[28px] p-7 text-left shadow-lg"> <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-700"> <i data-lucide="circle-help" class="h-7 w-7"></i> </span> <span data-template-id="menu-kuis-title" class="canva-text mt-7 block font-extrabold"></span> <span data-template-id="menu-kuis-desc" class="canva-text mt-3 block leading-relaxed"></span> <span class="mt-7 inline-flex items-center gap-2 font-bold text-amber-700">Buka <i data-lucide="arrow-right" class="h-4 w-4"></i></span> </button>
+      </div>
+     </div>
+    </section>
+    <section id="materi" class="slide">
+     <div class="mx-auto w-full max-w-6xl py-4"><button data-template-id="back-materi" class="canva-button back-menu inline-flex items-center gap-2 rounded-xl px-4 py-3 font-bold" type="button"> <i data-lucide="arrow-left" class="h-4 w-4"></i> </button>
+      <header class="mt-7">
+       <p data-template-id="formula-kicker" class="canva-text font-bold uppercase tracking-widest"></p>
+       <h2 data-template-id="formula-heading" class="canva-text mt-2 font-extrabold"></h2>
+       <p data-template-id="formula-helper" class="canva-text mt-3 max-w-3xl leading-relaxed"></p>
+      </header>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+       <article data-template-id="countif-card" class="canva-card formula-card rounded-3xl p-5 shadow-sm">
+        <div data-template-id="countif-icon" class="canva-panel flex h-11 w-11 items-center justify-center rounded-2xl"><i data-lucide="list-checks"></i>
+        </div>
+        <p data-template-id="countif-name" class="canva-text mt-5 font-extrabold"></p>
+        <p data-template-id="countif-description" class="canva-text mt-2 leading-relaxed"></p><code data-template-id="countif-syntax" class="canva-tag mt-4 inline-block rounded-lg px-3 py-2 text-xs font-bold"></code>
+       </article>
+       <article data-template-id="sumif-card" class="canva-card formula-card rounded-3xl p-5 shadow-sm">
+        <div data-template-id="sumif-icon" class="canva-panel flex h-11 w-11 items-center justify-center rounded-2xl"><i data-lucide="sigma"></i>
+        </div>
+        <p data-template-id="sumif-name" class="canva-text mt-5 font-extrabold"></p>
+        <p data-template-id="sumif-description" class="canva-text mt-2 leading-relaxed"></p><code data-template-id="sumif-syntax" class="canva-tag mt-4 inline-block rounded-lg px-3 py-2 text-xs font-bold"></code>
+       </article>
+       <article data-template-id="upper-card" class="canva-card formula-card rounded-3xl p-5 shadow-sm">
+        <div data-template-id="upper-icon" class="canva-panel flex h-11 w-11 items-center justify-center rounded-2xl"><i data-lucide="case-upper"></i>
+        </div>
+        <p data-template-id="upper-name" class="canva-text mt-5 font-extrabold"></p>
+        <p data-template-id="upper-description" class="canva-text mt-2 leading-relaxed"></p><code data-template-id="upper-syntax" class="canva-tag mt-4 inline-block rounded-lg px-3 py-2 text-xs font-bold"></code>
+       </article>
+       <article data-template-id="lower-card" class="canva-card formula-card rounded-3xl p-5 shadow-sm">
+        <div data-template-id="lower-icon" class="canva-panel flex h-11 w-11 items-center justify-center rounded-2xl"><i data-lucide="case-lower"></i>
+        </div>
+        <p data-template-id="lower-name" class="canva-text mt-5 font-extrabold"></p>
+        <p data-template-id="lower-description" class="canva-text mt-2 leading-relaxed"></p><code data-template-id="lower-syntax" class="canva-tag mt-4 inline-block rounded-lg px-3 py-2 text-xs font-bold"></code>
+       </article>
+       <article data-template-id="left-card" class="canva-card formula-card rounded-3xl p-5 shadow-sm">
+        <div data-template-id="left-icon" class="canva-panel flex h-11 w-11 items-center justify-center rounded-2xl"><i data-lucide="align-left"></i>
+        </div>
+        <p data-template-id="left-name" class="canva-text mt-5 font-extrabold"></p>
+        <p data-template-id="left-description" class="canva-text mt-2 leading-relaxed"></p><code data-template-id="left-syntax" class="canva-tag mt-4 inline-block rounded-lg px-3 py-2 text-xs font-bold"></code>
+       </article>
+       <article data-template-id="right-card" class="canva-card formula-card rounded-3xl p-5 shadow-sm">
+        <div data-template-id="right-icon" class="canva-panel flex h-11 w-11 items-center justify-center rounded-2xl"><i data-lucide="align-right"></i>
+        </div>
+        <p data-template-id="right-name" class="canva-text mt-5 font-extrabold"></p>
+        <p data-template-id="right-description" class="canva-text mt-2 leading-relaxed"></p><code data-template-id="right-syntax" class="canva-tag mt-4 inline-block rounded-lg px-3 py-2 text-xs font-bold"></code>
+       </article>
+       <article data-template-id="mid-card" class="canva-card formula-card rounded-3xl p-5 shadow-sm">
+        <div data-template-id="mid-icon" class="canva-panel flex h-11 w-11 items-center justify-center rounded-2xl"><i data-lucide="text-cursor-input"></i>
+        </div>
+        <p data-template-id="mid-name" class="canva-text mt-5 font-extrabold"></p>
+        <p data-template-id="mid-description" class="canva-text mt-2 leading-relaxed"></p><code data-template-id="mid-syntax" class="canva-tag mt-4 inline-block rounded-lg px-3 py-2 text-xs font-bold"></code>
+       </article>
+      </div>
+     </div>
+    </section>
+    <section id="praktik" class="slide">
+     <div class="mx-auto w-full max-w-6xl py-4"><button data-template-id="back-praktik" class="canva-button back-menu inline-flex items-center gap-2 rounded-xl px-4 py-3 font-bold" type="button"> <i data-lucide="arrow-left" class="h-4 w-4"></i> </button>
+      <div data-template-id="simulator-section" class="canva-section mt-7 rounded-[28px] border p-5 shadow-xl sm:p-8">
+       <p data-template-id="simulator-kicker" class="canva-text font-bold uppercase tracking-widest"></p>
+       <h2 data-template-id="simulator-title" class="canva-text mt-2 font-extrabold"></h2>
+       <p data-template-id="simulator-description" class="canva-text mt-3 max-w-3xl leading-relaxed"></p>
+       <div data-template-id="data-note" class="canva-banner mt-5 inline-block rounded-xl px-4 py-3 text-sm font-semibold"></div>
+       <div class="mt-6 overflow-x-auto">
+        <table class="spreadsheet" aria-label="Tabel data penjualan">
+         <thead>
+          <tr>
+           <th class="corner"></th>
+           <th class="col">A</th>
+           <th class="col">B</th>
+           <th class="col">C</th>
+           <th class="col">D</th>
+           <th class="col">E</th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <th class="row">1</th>
+           <td class="cell">Nama</td>
+           <td class="cell">Kategori</td>
+           <td class="cell">Status</td>
+           <td class="cell">Jumlah</td>
+           <td class="cell">Kode</td>
+          </tr>
+          <tr>
+           <th class="row">2</th>
+           <td class="cell" data-cell="A2">Alya</td>
+           <td class="cell" data-cell="B2">Buku</td>
+           <td class="cell" data-cell="C2">Lunas</td>
+           <td class="cell" data-cell="D2">12000</td>
+           <td class="cell" data-cell="E2">BK-021</td>
+          </tr>
+          <tr>
+           <th class="row">3</th>
+           <td class="cell" data-cell="A3">Bima</td>
+           <td class="cell" data-cell="B3">Alat Tulis</td>
+           <td class="cell" data-cell="C3">Belum</td>
+           <td class="cell" data-cell="D3">8000</td>
+           <td class="cell" data-cell="E3">AT-114</td>
+          </tr>
+          <tr>
+           <th class="row">4</th>
+           <td class="cell" data-cell="A4">Citra</td>
+           <td class="cell" data-cell="B4">Buku</td>
+           <td class="cell" data-cell="C4">Lunas</td>
+           <td class="cell" data-cell="D4">15000</td>
+           <td class="cell" data-cell="E4">BK-119</td>
+          </tr>
+          <tr>
+           <th class="row">5</th>
+           <td class="cell" data-cell="A5">Dani</td>
+           <td class="cell" data-cell="B5">Alat Tulis</td>
+           <td class="cell" data-cell="C5">Lunas</td>
+           <td class="cell" data-cell="D5">7000</td>
+           <td class="cell" data-cell="E5">AT-220</td>
+          </tr>
+          <tr>
+           <th class="row">6</th>
+           <td class="cell" data-cell="A6">Eka</td>
+           <td class="cell" data-cell="B6">Buku</td>
+           <td class="cell" data-cell="C6">Belum</td>
+           <td class="cell" data-cell="D6">10000</td>
+           <td class="cell" data-cell="E6">BK-301</td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <form id="formula-form" class="mt-7"><label data-template-id="formula-input-label" for="formula-input" class="canva-text mb-2 block font-bold"></label>
+        <div class="flex flex-col gap-3 sm:flex-row"><input id="formula-input" data-template-id="formula-input" class="canva-input w-full rounded-2xl border-2 border-sky-100 px-5 py-4 font-mono font-bold focus:border-sky-500" type="text" autocomplete="off"> <button data-template-id="calculate-button" class="canva-button rounded-2xl px-6 py-4 font-bold" type="submit"></button>
+        </div>
+       </form>
+       <div class="mt-4 flex flex-wrap gap-2"><button type="button" class="example-button formula-example rounded-full bg-sky-50 px-3 py-2 font-mono text-xs font-bold text-sky-700">=COUNTIF(C2:C6,"Lunas")</button> <button type="button" class="example-button formula-example rounded-full bg-sky-50 px-3 py-2 font-mono text-xs font-bold text-sky-700">=SUMIF(B2:B6,"Buku",D2:D6)</button> <button type="button" class="example-button formula-example rounded-full bg-sky-50 px-3 py-2 font-mono text-xs font-bold text-sky-700">=UPPER(A2)</button> <button type="button" class="example-button formula-example rounded-full bg-sky-50 px-3 py-2 font-mono text-xs font-bold text-sky-700">=MID(E2,4,3)</button>
+       </div>
+       <div id="result-panel" class="mt-5 hidden rounded-2xl border px-5 py-4" role="status" aria-live="polite">
+        <p id="result-label" class="font-bold"></p>
+        <p id="result-detail" class="mt-1 text-sm"></p>
+       </div>
+      </div>
+     </div>
+    </section>
+    <section id="kuis" class="slide">
+     <div class="mx-auto w-full max-w-6xl py-4"><button data-template-id="back-kuis" class="canva-button back-menu inline-flex items-center gap-2 rounded-xl px-4 py-3 font-bold" type="button"> <i data-lucide="arrow-left" class="h-4 w-4"></i> </button>
+      <header class="mt-7 text-center">
+       <p data-template-id="quiz-kicker" class="canva-text font-bold uppercase tracking-widest"></p>
+       <h2 data-template-id="quiz-title" class="canva-text mt-2 font-extrabold"></h2>
+       <p data-template-id="quiz-description" class="canva-text mt-3"></p>
+      </header>
+      <div class="mt-8 grid gap-5 lg:grid-cols-3">
+       <article data-template-id="quiz-one-card" class="canva-card rounded-3xl border p-6">
+        <p data-template-id="quiz-one-number" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-extrabold"></p>
+        <h3 data-template-id="quiz-one-question" class="canva-text mt-4 font-bold leading-relaxed"></h3>
+        <div class="mt-5 space-y-3" data-question="q1"><button data-template-id="q1-option-a" class="canva-button quiz-option w-full rounded-xl px-4 py-3 text-left font-semibold" data-correct="false" type="button"></button> <button data-template-id="q1-option-b" class="canva-button quiz-option w-full rounded-xl px-4 py-3 text-left font-semibold" data-correct="true" type="button"></button> <button data-template-id="q1-option-c" class="canva-button quiz-option w-full rounded-xl px-4 py-3 text-left font-semibold" data-correct="false" type="button"></button>
+        </div>
+        <div id="q1-feedback-correct" data-template-id="q1-feedback-correct" class="canva-banner mt-4 hidden rounded-xl px-4 py-3 text-sm"></div>
+        <div id="q1-feedback-wrong" data-template-id="q1-feedback-wrong" class="canva-banner mt-4 hidden rounded-xl px-4 py-3 text-sm"></div>
+       </article>
+       <article data-template-id="quiz-two-card" class="canva-card rounded-3xl border p-6">
+        <p data-template-id="quiz-two-number" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-extrabold"></p>
+        <h3 data-template-id="quiz-two-question" class="canva-text mt-4 font-bold leading-relaxed"></h3>
+        <div class="mt-5 space-y-3" data-question="q2"><button data-template-id="q2-option-a" class="canva-button quiz-option w-full rounded-xl px-4 py-3 text-left font-semibold" data-correct="true" type="button"></button> <button data-template-id="q2-option-b" class="canva-button quiz-option w-full rounded-xl px-4 py-3 text-left font-semibold" data-correct="false" type="button"></button> <button data-template-id="q2-option-c" class="canva-button quiz-option w-full rounded-xl px-4 py-3 text-left font-semibold" data-correct="false" type="button"></button>
+        </div>
+        <div id="q2-feedback-correct" data-template-id="q2-feedback-correct" class="canva-banner mt-4 hidden rounded-xl px-4 py-3 text-sm"></div>
+        <div id="q2-feedback-wrong" data-template-id="q2-feedback-wrong" class="canva-banner mt-4 hidden rounded-xl px-4 py-3 text-sm"></div>
+       </article>
+       <article data-template-id="quiz-three-card" class="canva-card rounded-3xl border p-6">
+        <p data-template-id="quiz-three-number" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-extrabold"></p>
+        <h3 data-template-id="quiz-three-question" class="canva-text mt-4 font-bold leading-relaxed"></h3>
+        <div class="mt-5 space-y-3" data-question="q3"><button data-template-id="q3-option-a" class="canva-button quiz-option w-full rounded-xl px-4 py-3 text-left font-semibold" data-correct="false" type="button"></button> <button data-template-id="q3-option-b" class="canva-button quiz-option w-full rounded-xl px-4 py-3 text-left font-semibold" data-correct="true" type="button"></button> <button data-template-id="q3-option-c" class="canva-button quiz-option w-full rounded-xl px-4 py-3 text-left font-semibold" data-correct="false" type="button"></button>
+        </div>
+        <div id="q3-feedback-correct" data-template-id="q3-feedback-correct" class="canva-banner mt-4 hidden rounded-xl px-4 py-3 text-sm"></div>
+        <div id="q3-feedback-wrong" data-template-id="q3-feedback-wrong" class="canva-banner mt-4 hidden rounded-xl px-4 py-3 text-sm"></div>
+       </article>
+      </div>
+     </div>
+    </section>
+   </main>
+  </div>
+  <script src="/_sdk/fef09cb5f5b2424b.editing_sdk.js" integrity="sha512-PbmCvZWt+xecnQll4ofK5HTtTS+pGwwY1xn9+p49qHgEHml+uvyc0o1f2Eltkd4t324iwgnf7acUjfnKHkik1w=="></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+
+      function showSlide(id) {
+        document.querySelectorAll(".slide").forEach((slide) => {
+          slide.classList.toggle("active", slide.id === id);
+        });
+        document.getElementById(id).scrollTop = 0;
+      }
+
+      document.getElementById("play-button").addEventListener("click", () => showSlide("menu"));
+
+      ["materi", "praktik", "kuis"].forEach((id) => {
+        document.getElementById("menu-" + id).addEventListener("click", () => showSlide(id));
+      });
+
+      document.querySelectorAll(".back-menu").forEach((button) => {
+        button.addEventListener("click", () => showSlide("menu"));
+      });
+
+      const sheetData = {
+        A2: "Alya", B2: "Buku", C2: "Lunas", D2: 12000, E2: "BK-021",
+        A3: "Bima", B3: "Alat Tulis", C3: "Belum", D3: 8000, E3: "AT-114",
+        A4: "Citra", B4: "Buku", C4: "Lunas", D4: 15000, E4: "BK-119",
+        A5: "Dani", B5: "Alat Tulis", C5: "Lunas", D5: 7000, E5: "AT-220",
+        A6: "Eka", B6: "Buku", C6: "Belum", D6: 10000, E6: "BK-301"
+      };
+
+      const input = document.getElementById("formula-input");
+      const panel = document.getElementById("result-panel");
+      const resultLabel = document.getElementById("result-label");
+      const resultDetail = document.getElementById("result-detail");
+
+      function showResult(ok, label, detail) {
+        panel.className = "mt-5 rounded-2xl border px-5 py-4 " +
+          (ok ? "border-green-200 bg-green-50 text-green-900" : "border-red-200 bg-red-50 text-red-900");
+        resultLabel.textContent = label;
+        resultDetail.textContent = detail;
+      }
+
+      function clearHighlights() {
+        document.querySelectorAll("[data-cell]").forEach((cell) => {
+          cell.classList.remove("active-range");
+        });
+      }
+
+      function cellsInRange(start, end) {
+        const startColumn = start.charCodeAt(0);
+        const endColumn = end.charCodeAt(0);
+        const startRow = Number(start.slice(1));
+        const endRow = Number(end.slice(1));
+        const cells = [];
+
+        if (startColumn > endColumn || startRow > endRow) return [];
+
+        for (let column = startColumn; column <= endColumn; column++) {
+          for (let row = startRow; row <= endRow; row++) {
+            const key = String.fromCharCode(column) + row;
+            if (sheetData[key] !== undefined) cells.push(key);
+          }
+        }
+
+        return cells;
+      }
+
+      function highlightRange(start, end) {
+        const range = cellsInRange(start, end);
+        range.forEach((key) => {
+          const cell = document.querySelector('[data-cell="' + key + '"]');
+          if (cell) cell.classList.add("active-range");
+        });
+        return range;
+      }
+
+      function normalizeText(text) {
+        return String(text).trim().toLowerCase();
+      }
+
+      document.getElementById("formula-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        clearHighlights();
+
+        const formula = input.value.trim();
+        const countIfMatch = formula.match(/^=\s*COUNTIF\s*\(\s*([A-E][2-6])\s*:\s*([A-E][2-6])\s*,\s*"([^"]+)"\s*\)$/i);
+        const sumIfMatch = formula.match(/^=\s*SUMIF\s*\(\s*([A-E][2-6])\s*:\s*([A-E][2-6])\s*,\s*"([^"]+)"\s*,\s*([A-E][2-6])\s*:\s*([A-E][2-6])\s*\)$/i);
+        const textMatch = formula.match(/^=\s*(UPPER|LOWER|LEFT|RIGHT|MID)\s*\(\s*([A-E][2-6])(?:\s*,\s*(\d+))?(?:\s*,\s*(\d+))?\s*\)$/i);
+
+        if (countIfMatch) {
+          const range = highlightRange(countIfMatch[1].toUpperCase(), countIfMatch[2].toUpperCase());
+          const criteria = countIfMatch[3];
+          const total = range.filter((key) => normalizeText(sheetData[key]) === normalizeText(criteria)).length;
+
+          showResult(
+            true,
+            "Hasil COUNTIF: " + total,
+            'COUNTIF menemukan "' + criteria + '" sebanyak ' + total + " kali pada rentang " + countIfMatch[1].toUpperCase() + ":" + countIfMatch[2].toUpperCase() + "."
+          );
+          return;
+        }
+
+        if (sumIfMatch) {
+          const criteriaRange = highlightRange(sumIfMatch[1].toUpperCase(), sumIfMatch[2].toUpperCase());
+          const sumRange = highlightRange(sumIfMatch[4].toUpperCase(), sumIfMatch[5].toUpperCase());
+          const criteria = sumIfMatch[3];
+          const values = [];
+
+          criteriaRange.forEach((criteriaCell, index) => {
+            const sumCell = sumRange[index];
+            if (sumCell && normalizeText(sheetData[criteriaCell]) === normalizeText(criteria)) {
+              values.push(Number(sheetData[sumCell]));
+            }
+          });
+
+          const total = values.reduce((sum, value) => sum + value, 0);
+
+          showResult(
+            true,
+            "Hasil SUMIF: " + total.toLocaleString("id-ID"),
+            'SUMIF menjumlahkan data dengan kriteria "' + criteria + '".'
+          );
+          return;
+        }
+
+        if (textMatch) {
+          const functionName = textMatch[1].toUpperCase();
+          const cellRef = textMatch[2].toUpperCase();
+          const firstNumber = Number(textMatch[3]);
+          const secondNumber = Number(textMatch[4]);
+          const value = String(sheetData[cellRef]);
+
+          document.querySelector('[data-cell="' + cellRef + '"]').classList.add("active-range");
+
+          let resultValue = "";
+
+          if (functionName === "UPPER") resultValue = value.toUpperCase();
+          if (functionName === "LOWER") resultValue = value.toLowerCase();
+
+          if (functionName === "LEFT") {
+            if (!firstNumber) {
+              showResult(false, "Jumlah karakter belum lengkap", "Gunakan format seperti =LEFT(E2,2).");
+              return;
+            }
+            resultValue = value.slice(0, firstNumber);
+          }
+
+          if (functionName === "RIGHT") {
+            if (!firstNumber) {
+              showResult(false, "Jumlah karakter belum lengkap", "Gunakan format seperti =RIGHT(E2,3).");
+              return;
+            }
+            resultValue = value.slice(-firstNumber);
+          }
+
+          if (functionName === "MID") {
+            if (!firstNumber || !secondNumber) {
+              showResult(false, "Posisi atau jumlah karakter belum lengkap", "Gunakan format seperti =MID(E2,4,3).");
+              return;
+            }
+            resultValue = value.slice(firstNumber - 1, firstNumber - 1 + secondNumber);
+          }
+
+          showResult(
+            true,
+            "Hasil " + functionName + ": " + resultValue,
+            functionName + " mengolah isi sel " + cellRef + ' yang bernilai "' + value + '".'
+          );
+          return;
+        }
+
+        showResult(
+          false,
+          "Format rumus belum dikenali",
+          'Coba gunakan =COUNTIF(C2:C6,"Lunas"), =SUMIF(B2:B6,"Buku",D2:D6), atau =UPPER(A2).'
+        );
+      });
+
+      document.querySelectorAll(".formula-example").forEach((button) => {
+        button.addEventListener("click", () => {
+          input.value = button.textContent;
+          input.focus();
+        });
+      });
+
+      document.querySelectorAll("[data-question]").forEach((group) => {
+        group.querySelectorAll("button").forEach((button) => {
+          button.addEventListener("click", () => {
+            if (group.dataset.answered) return;
+
+            group.dataset.answered = "true";
+            const correct = button.dataset.correct === "true";
+
+            group.querySelectorAll("button").forEach((option) => {
+              option.disabled = true;
+              if (option.dataset.correct === "true") option.classList.add("correct");
+            });
+
+            if (!correct) button.classList.add("incorrect");
+
+            const feedbackId = group.dataset.question + "-feedback-" + (correct ? "correct" : "wrong");
+            document.getElementById(feedbackId).classList.add("feedback-show");
+          });
+        });
+      });
+    });
+  </script>
+ </body>
+</html>
